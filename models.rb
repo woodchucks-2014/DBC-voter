@@ -7,7 +7,6 @@ class Model
 
   def user_exists?(userdata)
     @name = @db.execute("SELECT id, username FROM users WHERE username = ?", userdata)
-    p
     @name.flatten!
     !@name.empty?
   end
@@ -37,10 +36,12 @@ class Model
   def add_subject(subject)
     @db.execute("INSERT INTO subjects(subject_name, user_id) VALUES (?, ?)", subject, @name[0])
     new_subject_id = @db.execute("SELECT MAX(id) FROM subjects")
+    new_subject_id.first.first
   end
 
   def load_answers(subject_id)
   answers = @db.execute("SELECT answer_text FROM answers JOIN subjects ON (subjects.id = answers.subject_id) WHERE subject_id = (?)", subject_id)
+
   end
 
   def add_answer(answer, subject)

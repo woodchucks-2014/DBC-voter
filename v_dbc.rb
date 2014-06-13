@@ -8,14 +8,15 @@ def initialize
 end
 
 def program_loop
-  system('clear')
+  #system('clear')
   @username = @model.login(View.welcome)
   loop do
   puts "Welcome #{@username}"
   subject_choice = subjects_module
-  system('clear')
+  break if subject_choice == 'quit'
+  #system('clear')
   answers_module(subject_choice)
-  system('clear')
+  #system('clear')
 end
 end
 
@@ -42,6 +43,8 @@ def answers_module(subject_choice)
   end
 
 end
+
+
 #display welcome view
 #receive the username from welcome view
 #pass the username to login model

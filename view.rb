@@ -63,6 +63,7 @@ x = gets.chomp
 #submits to db
 end
 
+
 end
 #VIEWS
 # login / welcome
