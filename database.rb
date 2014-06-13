@@ -1,0 +1,63 @@
+require "sqlite3"
+db = SQLite3::Database.new "voter.db"
+
+db.execute <<SQL
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT
+  );
+SQL
+
+db.execute <<SQL
+CREATE TABLE IF NOT EXISTS subjects (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+user_id INTEGER NOT NULL,
+FOREIGN KEY(user_id) REFERENCES users(id)
+);
+SQL
+
+
+db.execute <<SQL
+CREATE TABLE IF NOT EXISTS answers (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+user_id INTEGER NOT NULL,
+subject_id INTEGER NOT NULL,
+FOREIGN KEY(user_id) REFERENCES users(id),
+FOREIGN KEY(subject_id) REFERENCES subjects(id)
+);
+SQL
+
+
+db.execute <<SQL
+CREATE TABLE IF NOT EXISTS comments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  answer_id INTEGER NOT NULL,
+  FOREIGN KEY(user_id) REFERENCES users(id),
+  FOREIGN KEY(answer_id) REFERENCES answers(id)
+  );
+SQL
+
+db.execute(
+
+  "INSERT INTO subjects (user_id)" +
+  "VALUES (8765654)"
+  )
+
+db.execute( "SELECT * FROM subjects" ) do |subject|
+  puts subject
+end
+
+# CREATE TABLE answers
+
+
+# CREATE TABLE answers
+# (
+# id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+#   )
+
+
+
+
+
+#1027692
