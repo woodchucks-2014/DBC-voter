@@ -3,13 +3,15 @@ db = SQLite3::Database.new "voter.db"
 
 db.execute <<SQL
 CREATE TABLE IF NOT EXISTS users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username VARCHAR(64) NOT NULL
   );
 SQL
 
 db.execute <<SQL
 CREATE TABLE IF NOT EXISTS subjects (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
+subject_name TEXT NOT NULL,
 user_id INTEGER NOT NULL,
 FOREIGN KEY(user_id) REFERENCES users(id)
 );
@@ -19,6 +21,7 @@ SQL
 db.execute <<SQL
 CREATE TABLE IF NOT EXISTS answers (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
+answer_text TEXT NOT NULL,
 user_id INTEGER NOT NULL,
 subject_id INTEGER NOT NULL,
 FOREIGN KEY(user_id) REFERENCES users(id),
@@ -28,7 +31,7 @@ SQL
 
 
 db.execute <<SQL
-CREATE TABLE IF NOT EXISTS comments (
+CREATE TABLE IF NOT EXISTS votes (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
   answer_id INTEGER NOT NULL,
@@ -37,15 +40,15 @@ CREATE TABLE IF NOT EXISTS comments (
   );
 SQL
 
-db.execute(
+# db.execute(
 
-  "INSERT INTO subjects (user_id)" +
-  "VALUES (8765654)"
-  )
+#   "INSERT INTO subjects (user_id)" +
+#   "VALUES (8765654)"
+#   )
 
-db.execute( "SELECT * FROM subjects" ) do |subject|
-  puts subject
-end
+# db.execute( "SELECT * FROM subjects" ) do |subject|
+#   puts subject
+# end
 
 # CREATE TABLE answers
 

@@ -1,11 +1,46 @@
+require_relative "view.rb"
+require_relative "models.rb"
+
 class Controller
 def initialize
   @username = ''
+  @model = Model.new
 end
 
 def program_loop
-  @username = Model.login(View.welcome)
-  puts @username
+  system('clear')
+  @username = @model.login(View.welcome)
+  loop do
+  puts "Welcome #{@username}"
+  subject_choice = subjects_module
+  system('clear')
+  answers_module(subject_choice)
+  system('clear')
+end
+end
+
+def subjects_module
+  subjects = @model.load_subjects
+  View.subjects_menu(subjects)
+  subject_choice = View.subjects_menu_options
+  if subject_choice == "add"
+    subject_string = View.new_subject
+    new_subject_id = @model.add_subject(subject_string)
+    return new_subject_id
+  end
+  subject_choice
+end
+
+def answers_module(subject_choice)
+  answers = @model.load_answers(subject_choice.to_i)
+  View.view_answers(answers)
+  answer_choice = View.answers_menu_options
+  if answer_choice == 'add'
+    answer_string = View.new_answer
+    @model.add_answer(answer_string, subject_choice.to_i)
+    View.view_answers(answers)
+  end
+
 end
 #display welcome view
 #receive the username from welcome view
@@ -20,69 +55,13 @@ end
 #controller sends answers from db view answers
 end
 
-class View
 
-def self.welcome
-  #get username from user (& password when implemented)
-  #returns username to controller
-  #send back to the login model via controller
-  #print ascii art and user name ('welcome back') or ('new user created')
 
-  puts "Welcome to DBC Voter!!"
-  puts "Where you can create subjects, answer them, and vote on the best answers!"
-  puts "What is your username?"
-  username = gets.chomp
-end
 
-def self.subjects_menu(subjects)
-  #is sent list of subjects from model db
-  #looping interface
-  #shows list of subjects
-  #option to view answers (by line number)
-  #option to add subject
-end
-
-def self.view_answers(answers)
-#displays all the answers for chosen subject - ranked by number of votes
-#displays number of votes
-#option to add answer
-#option to vote
-end
-
-def self.add_answer
-#takes a new answer from the user
-#submits to db
-end
-
-end
-
-class Model
-  def self.login(username)
-  #connect to the db and authenticate username
-  #else creates a new user
-  #returns the username which is saved for the session
-  userdata = "Greg"
-  if username == userdata
-    return userdata
-  else
-    return username + 'new'
-  end
-end
-end
 
 vdbc = Controller.new
 vdbc.program_loop
-#VIEWS
-# login / welcome
-###user page
-###password
-# view subjects
-#   view answers
-#     vote
-      ###comment
-#   add answer
 
-# add subjects
 
 
 #MODEL - DB ACCESS
