@@ -32,7 +32,9 @@ class Model
   def load_subjects
     subject_display = @db.execute("SELECT subject_name, username FROM subjects JOIN users ON (users.id = subjects.user_id)")
     subjects_id_hash = @db.execute("SELECT id, subject_name FROM subjects")
-    #being lazy, pulling subject_name in "subjects_id_hash" only for easy Hash conversion
+    #being lazy, pulling subject_name in "subjects_id_hash" only for easy Hash conversion.
+    #It is not actually used, see what assign_id_indices does to it
+    #Refactor needed - should load all in one query and then parse
     [Hash[subject_display], Hash[subjects_id_hash]]
   end
 

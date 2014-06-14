@@ -16,10 +16,10 @@ end
 def self.subjects_menu(subjects, username)
   system('clear')
   puts "Welcome, #{username}"
-  puts "#".ljust(3)+"Subject Title".ljust(45)+"|Submitter".ljust(10)
+  puts "".ljust(2) + "#".ljust(2)+"|Submitter".ljust(14) + "Subject Title"
   puts "--------------------------------------------------------------------------"
   subjects.each_with_index{|(k,v), index|
-    print "#{index + 1}.".ljust(3)+"#{k}".ljust(45)+"|#{v}".ljust(10)
+    print "".ljust(2) + "#{index + 1}".ljust(2)+"|#{v}".ljust(14)+"#{k}"
     puts
   }
 end
@@ -53,10 +53,10 @@ def self.view_answers(answers, subject_name)
   system('clear')
   puts subject_name
   puts "-------------------------------------------------------"
-  puts "#".ljust(3) + "|UP|".ljust(5) + "Answer"
+  puts "#".ljust(3) + "|VTS|".ljust(7) + "Answer"
   puts "-------------------------------------------------------"
   answers.each_with_index { |(answer, votes), index|
-    print "#{index + 1}.".ljust(3) + "|#{votes}|".ljust(5) + "#{answer}"
+    print "#{index + 1}.".ljust(3) + "|".ljust(2) + "#{votes}".ljust(2)+ "|".ljust(3) + "#{answer}"
     puts
   }
   puts
