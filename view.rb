@@ -13,6 +13,8 @@ def self.welcome
 end
 
 def self.subjects_menu(subjects)
+  system('clear')
+  puts "Welcome #{@username}"
   puts "#".ljust(3)+"Subject Title".ljust(45)+"|Submitter".ljust(10)
   puts "--------------------------------------------------------------------------"
   subjects.each_with_index{|element, index|
@@ -44,7 +46,7 @@ end
 
 
 def self.view_answers(answers)
-
+system('clear')
 puts "#".ljust(3) + "|UP|".ljust(5) + "Answer"
 puts "-------------------------------------------------------"
 answers.each_with_index { |(answer, votes), index|
