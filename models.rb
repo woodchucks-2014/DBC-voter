@@ -25,6 +25,7 @@ class Model
       return username
     else
       new_user(username)
+      puts "Welcome new user!"
       return username
     end
   end
@@ -73,8 +74,6 @@ class Model
   end
 
   def vote(answer_id)
-    totalvotes = @db.execute("SELECT num_of_votes FROM votes WHERE answer_id = ?", answer_id)
-    totalvotes = (totalvotes.first.first) + 1
-    @db.execute("UPDATE votes SET num_of_votes=(?) WHERE answer_id = (?)", totalvotes, answer_id)
+    @db.execute("UPDATE votes SET num_of_votes = num_of_votes + 1 WHERE answer_id = (?)", answer_id)
   end
 end

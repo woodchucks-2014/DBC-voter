@@ -10,6 +10,7 @@ def self.welcome
   puts "Where you can create subjects, answer them, and vote on the best answers!"
   puts "What is your username?"
   username = gets.chomp
+  username.strip
 end
 
 def self.subjects_menu(subjects, username)
@@ -30,6 +31,7 @@ def self.subjects_menu_options
   puts "Or type add to add a new subject"
   puts "Or type quit to exit"
   x = gets.chomp
+  x.strip
 end
 
 #is sent list of subjects from model db
@@ -43,6 +45,7 @@ def self.new_subject
   puts
   puts "Enter the subject you would like to add"
   x = gets.chomp
+  x.strip
 end
 
 
@@ -68,11 +71,13 @@ def self.answers_menu_options
   puts "Or type add to add a new answer"
   puts "Or type back to go back to Main"
   x = gets.chomp
+  x.strip
 end
 
 def self.new_answer
   puts "Write a new answer for this question"
   x = gets.chomp
+  x.strip
 #takes a new answer from the user
 #submits to db
 end
