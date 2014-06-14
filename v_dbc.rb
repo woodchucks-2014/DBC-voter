@@ -28,7 +28,11 @@ class Controller
 			new_subject_id = @model.add_subject(subject_string) if !subject_string.empty?
 			return [new_subject_id, subject_string]
 		end
-		subject_array = [subjects_by_index[subject_choice.to_i].to_i, subjects[subject_choice.to_i - 1][0]]
+		if subjects_by_index[subject_choice.to_i] != nil
+			subject_array = [subjects_by_index[subject_choice.to_i].to_i, subjects[subject_choice.to_i - 1][0]]
+		else
+			return [0]
+		end
 	end
 
 	def answers_sequence(subject_array)
