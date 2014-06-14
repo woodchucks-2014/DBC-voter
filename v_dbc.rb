@@ -34,8 +34,7 @@ class Controller
 	def answers_sequence(subject_array)
 		subject_choice, subject_name = subject_array[0], subject_array[1]
 		loop do
-			answers_full_load = @model.load_answers(subject_choice)
-			answers_hash, votes_hash  = answers_full_load[0], answers_full_load[1]
+			answers_hash, votes_hash = @model.load_answers(subject_choice)
 			answers_with_index = @model.assign_id_indices(answers_hash)
 			View.view_answers(votes_hash, subject_name)
 			answer_choice = View.answers_menu_options
