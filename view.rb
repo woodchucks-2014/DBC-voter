@@ -12,9 +12,9 @@ def self.welcome
   username = gets.chomp
 end
 
-def self.subjects_menu(subjects)
+def self.subjects_menu(subjects, username)
   system('clear')
-  puts
+  puts "Welcome, #{username}"
   puts "#".ljust(3)+"Subject Title".ljust(45)+"|Submitter".ljust(10)
   puts "--------------------------------------------------------------------------"
   subjects.each_with_index{|element, index|
@@ -48,7 +48,6 @@ end
 
 def self.view_answers(answers, subject_name)
   system('clear')
-  puts 
   puts subject_name
   puts "-------------------------------------------------------"
   puts "#".ljust(3) + "|UP|".ljust(5) + "Answer"

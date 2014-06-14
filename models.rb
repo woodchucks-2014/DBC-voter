@@ -14,7 +14,6 @@ class Model
   def new_user(userdata)
     @db.execute("INSERT INTO users(username) VALUES (?)", userdata)
     @name = @db.execute("SELECT id, username FROM users WHERE username = ?", userdata)
-    puts "New User Created #{userdata}"
     @name.flatten!
   end
 
