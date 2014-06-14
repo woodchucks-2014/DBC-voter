@@ -32,8 +32,8 @@ class Model
   def load_subjects
     subject_display = @db.execute("SELECT subject_name, username FROM subjects JOIN users ON (users.id = subjects.user_id)")
     subjects_id_hash = @db.execute("SELECT id, subject_name FROM subjects")
-    #being lazy, pulling subject_name in "subject_for_ops" only for easy Hash conversion
-    [subject_display, Hash[subjects_id_hash]]
+    #being lazy, pulling subject_name in "subjects_id_hash" only for easy Hash conversion
+    [Hash[subject_display], Hash[subjects_id_hash]]
   end
 
   def add_subject(subject)

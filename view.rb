@@ -18,8 +18,8 @@ def self.subjects_menu(subjects, username)
   puts "Welcome, #{username}"
   puts "#".ljust(3)+"Subject Title".ljust(45)+"|Submitter".ljust(10)
   puts "--------------------------------------------------------------------------"
-  subjects.each_with_index{|element, index|
-    print "#{index + 1}.".ljust(3)+"#{element[0]}".ljust(45)+"|#{element[1]}".ljust(10)
+  subjects.each_with_index{|(k,v), index|
+    print "#{index + 1}.".ljust(3)+"#{k}".ljust(45)+"|#{v}".ljust(10)
     puts
   }
 end

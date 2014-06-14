@@ -28,8 +28,9 @@ class Controller
 			new_subject_id = @model.add_subject(subject_string) if !subject_string.empty?
 			return [new_subject_id, subject_string]
 		end
-		if subjects_by_index[subject_choice.to_i] != nil
-			subject_array = [subjects_by_index[subject_choice.to_i].to_i, subject_display[subject_choice.to_i - 1][0]]
+		subject_choice = subject_choice.to_i
+		if subjects_by_index[subject_choice] != nil
+			subject_array = [subjects_by_index[subject_choice], subject_display.keys[subject_choice - 1]]
 		else
 			return [0]
 		end
