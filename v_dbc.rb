@@ -46,9 +46,9 @@ class Controller
 			if answer_choice.downcase == 'add'
 				answer_string = View.new_answer
 				@model.add_answer(answer_string, subject_choice.to_i) if !answer_string.empty?
-			elsif answer_choice.length == 1
+			elsif answer_choice.length >= 1
 				answer_choice = answer_choice.to_i
-				@model.vote(answers_with_index[answer_choice]) if answer_choice != 0
+				@model.vote(answers_with_index[answer_choice]) if answer_choice != 0 && answers_with_index[answer_choice] != nil
 			end
 		end
 	end
