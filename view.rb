@@ -13,14 +13,17 @@ def self.welcome
 end
 
 def self.subjects_menu(subjects)
-  puts "#  Subject Title        Submitter"
+  puts "#".ljust(3)+"Subject Title".ljust(45)+"|Submitter".ljust(10)
+  puts "--------------------------------------------------------------------------"
   subjects.each_with_index{|element, index|
-    print "#{index + 1}. #{element[0]} -- #{element[1]}"
+    print "#{index + 1}.".ljust(3)+"#{element[0]}".ljust(45)+"|#{element[1]}".ljust(10)
     puts
   }
 end
 
 def self.subjects_menu_options
+  puts "--------------------------------------------------------------------------"
+  puts
   puts "Which number subject would you like to view?"
   puts "Or type add to add a new subject"
   x = gets.chomp
@@ -33,17 +36,22 @@ end
   #option to add subject
 
   def self.new_subject
+    puts "--------------------------------------------------------------------------"
+    puts
     puts "Enter the subject you would like to add"
     x = gets.chomp
   end
 
 
 def self.view_answers(answers)
-puts "Answers"
-answers.each_with_index { |answer, index|
-  print "#{index + 1}. #{answer}"
+
+puts "#".ljust(3) + "|UP|".ljust(5) + "Answer"
+puts "-------------------------------------------------------"
+answers.each_with_index { |(answer, votes), index|
+  print "#{index + 1}.".ljust(3) + "|#{votes}|".ljust(5) + "#{answer}"
   puts
   }
+  puts
 #displays all the answers for chosen subject - ranked by number of votes
 #displays number of votes
 #option to add answer

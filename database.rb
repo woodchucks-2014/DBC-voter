@@ -33,10 +33,11 @@ SQL
 db.execute <<SQL
 CREATE TABLE IF NOT EXISTS votes (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  user_id INTEGER NOT NULL,
   answer_id INTEGER NOT NULL,
-  FOREIGN KEY(user_id) REFERENCES users(id),
+  subject_id INTEGER NOT NULL,
+  num_of_votes INTEGER DEFAULT 0,
   FOREIGN KEY(answer_id) REFERENCES answers(id)
+  FOREIGN KEY(subject_id) REFERENCES subjects(id)
   );
 SQL
 
