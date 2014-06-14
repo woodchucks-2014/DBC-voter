@@ -46,7 +46,7 @@ class Model
     answers = @db.execute("SELECT answers.id, answer_text FROM answers JOIN subjects ON (subjects.id = answers.subject_id) WHERE answers.subject_id = (?)", subject_id)
     votes = @db.execute("SELECT answer_text, num_of_votes FROM votes INNER JOIN answers ON (answers.id=votes.answer_id) WHERE votes.subject_id = ?", subject_id)
     #this could use some refactoring, - first one needs another join - but functionality is required for the program to display answers by most upvoted
-    answers_hash = Hash[answers] #new hash, key => value is answers.id => answer_text
+    answers_hash = Hash[answers] #new hash, key => value is answers.id => answer_text. Pulling answer_text only for easy lazy hash conversion
     votes_hash = Hash[votes]  #new hash, key => value is answer_text => num_of votes
     
     answers_hash.each_with_index{|(k,v), index| answers_hash[k] = votes_hash.values[index]} #re-maps the answers_hash to be answers.id => num_of_votes

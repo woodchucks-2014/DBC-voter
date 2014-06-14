@@ -10,9 +10,9 @@ class Controller
 	def program_loop
 		@username = @model.login(View.welcome)
 		loop do
-			subject_choice = subjects_sequence
-			break if subject_choice == 'quit'
-			answers_sequence(subject_choice) if !subject_choice.nil?
+			subject_array = subjects_sequence
+			break if subject_array == 'quit'
+			answers_sequence(subject_array) if subject_array.first != 0
 		end
 	end
 
@@ -32,7 +32,7 @@ class Controller
 	end
 
 	def answers_sequence(subject_array)
-		subject_choice, subject_name = subject_array[0], subject_array[1]
+		subject_choice, subject_name = subject_array
 		loop do
 			answers_hash, votes_hash = @model.load_answers(subject_choice)
 			answers_with_index = @model.assign_id_indices(answers_hash)
