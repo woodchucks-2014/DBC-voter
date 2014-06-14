@@ -35,9 +35,10 @@ CREATE TABLE IF NOT EXISTS votes (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   answer_id INTEGER NOT NULL,
   subject_id INTEGER NOT NULL,
-  num_of_votes INTEGER DEFAULT 0,
+  user_id INTEGER NOT NULL,
   FOREIGN KEY(answer_id) REFERENCES answers(id)
   FOREIGN KEY(subject_id) REFERENCES subjects(id)
+  FOREIGN KEY(user_id) REFERENCES users(id)
   );
 SQL
 

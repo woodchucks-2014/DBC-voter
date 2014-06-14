@@ -17,10 +17,10 @@ class Controller
 	end
 
 	def subjects_sequence
-		subjects_full_load = @model.load_subjects
-		subjects = subjects_full_load[0]
-		subjects_by_index = @model.assign_id_indices(subjects_full_load[1])
-		View.subjects_menu(subjects, @username)
+		subjects_data = @model.load_subjects
+		subject_display = subjects_data[0]
+		subjects_by_index = @model.assign_id_indices(subjects_data[1])
+		View.subjects_menu(subject_display, @username)
 		subject_choice = View.subjects_menu_options
 		return 'quit' if subject_choice.downcase == 'quit'
 		if subject_choice.downcase == "add"
@@ -29,7 +29,7 @@ class Controller
 			return [new_subject_id, subject_string]
 		end
 		if subjects_by_index[subject_choice.to_i] != nil
-			subject_array = [subjects_by_index[subject_choice.to_i].to_i, subjects[subject_choice.to_i - 1][0]]
+			subject_array = [subjects_by_index[subject_choice.to_i].to_i, subject_display[subject_choice.to_i - 1][0]]
 		else
 			return [0]
 		end
@@ -38,7 +38,7 @@ class Controller
 	def answers_sequence(subject_array)
 		subject_choice, subject_name = subject_array
 		loop do
-			answers_hash, votes_hash = @model.process_answers(@model.load_answers(subject_choice))
+			answers_hash, votes_hash = @model.sort_answers(@model.load_answers(subject_choice))
 			answers_with_index = @model.assign_id_indices(answers_hash)
 			View.view_answers(votes_hash, subject_name)
 			answer_choice = View.answers_menu_options
@@ -48,7 +48,7 @@ class Controller
 				@model.add_answer(answer_string, subject_choice.to_i) if !answer_string.empty?
 			elsif answer_choice.length >= 1
 				answer_choice = answer_choice.to_i
-				@model.vote(answers_with_index[answer_choice]) if answer_choice != 0 && answers_with_index[answer_choice] != nil
+				@model.vote(answers_with_index[answer_choice], subject_choice) if answer_choice != 0 && answers_with_index[answer_choice] != nil
 			end
 		end
 	end
