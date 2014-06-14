@@ -38,23 +38,26 @@ class Model
 
   def add_subject(subject)
     @db.execute("INSERT INTO subjects(subject_name, user_id) VALUES (?, ?)", subject, @name[0])
-    id = @db.execute("SELECT id FROM subjects")
-    id.flatten.max
+    id = @db.execute("SELECT MAX(id) FROM subjects")
+    id.flatten.first
   end
 
   def load_answers(subject_id)
-    answers = @db.execute("SELECT answers.id, answer_text FROM answers JOIN subjects ON (subjects.id = answers.subject_id) WHERE answers.subject_id = (?)", subject_id)
-    votes = @db.execute("SELECT answer_text, num_of_votes FROM votes INNER JOIN answers ON (answers.id=votes.answer_id) WHERE votes.subject_id = ?", subject_id)
-    #this could use some refactoring, - first one needs another join - but functionality is required for the program to display answers by most upvoted
-    answers_hash = Hash[answers] #new hash, key => value is answers.id => answer_text. Pulling answer_text only for easy lazy hash conversion
-    votes_hash = Hash[votes]  #new hash, key => value is answer_text => num_of votes
-    
-    answers_hash.each_with_index{|(k,v), index| answers_hash[k] = votes_hash.values[index]} #re-maps the answers_hash to be answers.id => num_of_votes
-    
-    answers_hash = answers_hash.sort_by{|k,v| v}.reverse #sorts by numbers of votes value and reverses (highest first)
-    votes_hash = votes_hash.sort_by{|k,v| v}.reverse #sorts by numbers of votes value and reverses (highest first)
+    answers = @db.execute("SELECT answers.id, num_of_votes, answer_text FROM answers INNER JOIN subjects ON (subjects.id = answers.subject_id) INNER JOIN votes ON (answers.id = votes.answer_id) WHERE answers.subject_id = (?)", subject_id)
+  end
 
-    [answers_hash, votes_hash] #packs both hashes into an array to return to controller
+  def process_answers(answers)
+    answers_id_hash = {}
+    answers_display_hash = {}
+    answers.each_with_index{|elem|
+      answers_id_hash[elem[0]] = elem[1]
+      answers_display_hash[elem[2]] = elem[1]
+    }
+
+    answers_display_hash = answers_display_hash.sort_by{|k,v| v}.reverse
+    answers_id_hash = answers_id_hash.sort_by{|k,v| v}.reverse
+
+    [answers_id_hash, answers_display_hash]
   end
 
   def assign_id_indices(hash)
