@@ -25,6 +25,10 @@ class Model
       id.nil?
     end
 
+    def to_s
+      username
+    end
+
     def self.login(username)
       #connect to the db and authenticate username
       #else creates a new user
@@ -57,19 +61,50 @@ class Model
     end
   end
 
-  def self.load_subjects
-    subject_display = DB.execute("SELECT subject_name, username FROM subjects JOIN users ON (users.id = subjects.user_id)")
-    subjects_id_hash = DB.execute("SELECT id, subject_name FROM subjects")
-    #being lazy, pulling subject_name in "subjects_id_hash" only for easy Hash conversion.
-    #It is not actually used, see what assign_id_indices does to it
-    #Refactor needed - should load all in one query and then parse
-    [Hash[subject_display], Hash[subjects_id_hash]]
-  end
+  class Subject
+    attr_reader :id, :subject_name, :user_id
 
-  def self.add_subject(subject)
-    DB.execute("INSERT INTO subjects(subject_name, user_id) VALUES (?, ?)", subject, @name[0])
-    id = DB.execute("SELECT MAX(id) FROM subjects")
-    id.flatten.first
+    def initialize(attrs = {})
+      @id = attrs.fetch(:id)
+      @subject_name = attrs.fetch(:subject_name)
+      @user_id = attrs.fetch(:user_id)
+    end
+
+    def submitter
+      User.find('id', self.user_id)
+    end
+
+    def save
+      if new_record?
+        DB.execute("INSERT INTO subjects (subject_name, user_id) VALUES (?);", [subject_name, user_id])
+        @id = DB.last_insert_row_id
+      else
+        DB.execute("UPDATE subjects SET subject_name = ?, user_id = ? WHERE id = ?", [subject_name, user_id, id])
+      end
+      self
+    end
+
+    def new_record?
+      id.nil?
+    end
+
+    def to_s
+      subject_name
+    end
+
+    def self.all
+      records = DB.execute("SELECT * FROM subjects;")
+
+      records.map do |record|
+        from_record( record )
+      end
+    end
+
+    def self.from_record(record)
+      # The database will return back records as an array of
+      # [id, subject_name, user_id, created_at, updated_at]
+      new(id: record[0], subject_name: record[1], user_id: record[2])
+    end
   end
 
   def self.load_answers(subject_id)
@@ -84,22 +119,22 @@ class Model
     [answers_id_hash, answers_display_hash]
   end
 
-  def self.assign_id_indices(hash)
+  def self.assign_id_indices(enum)
     id_with_index = {}
-    hash.each_with_index{|(k, v), i| id_with_index[i+1] = k}
+    enum.each_with_index{|elem, i| id_with_index[i+1] = elem}
     id_with_index
   end
 
-  def self.add_answer(answer, subject_id)
-    DB.execute("INSERT INTO answers(answer_text, user_id, subject_id) VALUES (?, ?, ?)", answer, @name[0], subject_id)
+  def self.add_answer(answer, subject_id, username)
+    DB.execute("INSERT INTO answers(answer_text, user_id, subject_id) VALUES (?, ?, ?)", answer, username, subject_id)
     new_answer_id = DB.execute("SELECT MAX(id) FROM answers")
-    DB.execute("INSERT INTO votes(answer_id, subject_id, user_id) VALUES (?, ?, ?)", new_answer_id, subject_id, @name[0])
+    DB.execute("INSERT INTO votes(answer_id, subject_id, user_id) VALUES (?, ?, ?)", new_answer_id, subject_id, username)
   end
 
-  def self.vote(answer_id, subject_choice)
-    voted = DB.execute("SELECT id FROM votes WHERE user_id = (?) AND answer_id = (?)", @name[0], answer_id)
+  def self.vote(answer_id, subject_choice, username)
+    voted = DB.execute("SELECT id FROM votes WHERE user_id = (?) AND answer_id = (?)", username, answer_id)
     if voted.empty?
-      DB.execute("INSERT INTO votes(answer_id, subject_id, user_id) VALUES (?, ?, ?)", answer_id, subject_choice, @name[0])
+      DB.execute("INSERT INTO votes(answer_id, subject_id, user_id) VALUES (?, ?, ?)", answer_id, subject_choice, username)
     end
   end
 end

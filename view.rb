@@ -20,8 +20,8 @@ class View
     puts "Welcome, #{username}"
     puts "".ljust(2) + "#".ljust(2)+"|Submitter".ljust(14) + "Subject Title"
     puts "--------------------------------------------------------------------------"
-    subjects.each_with_index{|(subject_name,submitter), index|
-      print "".ljust(2) + "#{index + 1}".ljust(2)+"|#{submitter}".ljust(14)+"#{subject_name}"
+    subjects.each_with_index{|subject, index|
+      print "".ljust(2) + "#{index + 1}".ljust(2)+"|#{subject.submitter}".ljust(14)+"#{subject.subject_name}"
       puts
     }
   end
@@ -40,14 +40,14 @@ class View
     puts "Enter the subject you would like to add"
   end
 
-  def self.view_answers(answers, subject_name)
+  def self.view_answers(answers, subject)
     #displays all the answers for chosen subject - ranked by number of votes
     #displays number of votes
     #option to add answer
     #option to vote
     clear_screen
 
-    puts subject_name
+    puts subject
     puts "-------------------------------------------------------"
     puts "#".ljust(3) + "|VTS|".ljust(7) + "Answer"
     puts "-------------------------------------------------------"
