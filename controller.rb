@@ -1,7 +1,7 @@
 class Controller
   #display welcome view
-  #receive the username from welcome view
-  #pass the username to login model
+  #receive the user from welcome view
+  #pass the user to login model
 
   #receive authentication from login model either way
   #display subjects_menu view
@@ -14,7 +14,7 @@ class Controller
   def program_loop
     View.welcome
 
-    @username = Model.login(View.get_input)
+    @user = Model::User.login(View.get_input)
 
     loop do
       subject_array = subjects_sequence
@@ -29,7 +29,7 @@ class Controller
     subjects_data = Model.load_subjects
     subject_display = subjects_data[0]
     subjects_by_index = Model.assign_id_indices(subjects_data[1])
-    View.subjects_menu(subject_display, @username)
+    View.subjects_menu(subject_display, @user.username)
     View.subjects_menu_options
     subject_choice = View.get_input
     return 'quit' if subject_choice.downcase == 'quit'

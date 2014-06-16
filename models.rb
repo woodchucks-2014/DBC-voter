@@ -3,27 +3,57 @@ require 'sqlite3'
 class Model
   DB = SQLite3::Database.open "voter.db"
 
-  def self.user_exists?(userdata)
-    @name = DB.execute("SELECT id, username FROM users WHERE username = ?", userdata)
-    @name.flatten!
-    !@name.empty?
-  end
+  class User
+    attr_reader :username, :id
 
-  def self.new_user(userdata)
-    DB.execute("INSERT INTO users(username) VALUES (?)", userdata)
-    @name = DB.execute("SELECT id, username FROM users WHERE username = ?", userdata)
-    @name.flatten!
-  end
+    def initialize(username, id = nil)
+      @username = username
+      @id = id
+    end
 
-  def self.login(username)
-    #connect to the db and authenticate username
-    #else creates a new user
-    #returns the username which is saved for the session
-    if user_exists?(username)
-      return username
-    else
-      new_user(username)
-      return username
+    def save
+      if new_record?
+        DB.execute("INSERT INTO users (username) VALUES (?);", username)
+        @id = DB.last_insert_row_id
+      else
+        DB.execute("UPDATE users SET username = ? WHERE id = ?", username, id)
+      end
+      self
+    end
+
+    def new_record?
+      id.nil?
+    end
+
+    def self.login(username)
+      #connect to the db and authenticate username
+      #else creates a new user
+      #returns the user which is saved for the session
+      if user = User.find('username', username)
+        return user
+      else
+        user = User.new(username)
+        user.save
+
+        return user
+      end
+    end
+
+    def self.find(field, value)
+      record = DB.execute("SELECT * FROM users WHERE #{field} = ?", value).first
+
+      # Sometimes record will be nil, in which case we should not
+      # attempt to create a user but instead return nil
+      if record
+        from_record( record )
+      else
+        nil
+      end
+    end
+
+    def self.from_record(record)
+      # The database will return back records as an array of [id, username]
+      new(record[1], record[0])
     end
   end
 
