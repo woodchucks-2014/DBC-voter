@@ -20,8 +20,8 @@ class View
     puts "Welcome, #{username}"
     puts "".ljust(2) + "#".ljust(2)+"|Submitter".ljust(14) + "Subject Title"
     puts "--------------------------------------------------------------------------"
-    subjects.each_with_index{|(k,v), index|
-      print "".ljust(2) + "#{index + 1}".ljust(2)+"|#{v}".ljust(14)+"#{k}"
+    subjects.each_with_index{|(subject_name,submitter), index|
+      print "".ljust(2) + "#{index + 1}".ljust(2)+"|#{submitter}".ljust(14)+"#{subject_name}"
       puts
     }
   end
